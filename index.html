@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Gastos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="login-screen" class="screen">
+        <div class="login-card">
+            <h2>Acceso Requerido</h2>
+            <input type="password" id="password-input" placeholder="Contraseña">
+            <button id="login-button">Entrar</button>
+            <p id="login-error" class="hidden">Contraseña incorrecta</p>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="screen hidden">
+        <header>
+            <h1>Mis Gastos</h1>
+            <div class="summary">
+                <div class="stat-box">
+                    <span class="stat-label">Total Gastado</span>
+                    <span class="stat-value" id="total-spent">0,00 €</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Proyectos Activos</span>
+                    <span class="stat-value" id="active-projects">0</span>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section class="projects-section">
+                <h2>Proyectos</h2>
+                <div class="projects-grid" id="projects-grid">
+                    <!-- Tarjetas de proyectos -->
+                </div>
+            </section>
+
+            <div class="content-row">
+                <section class="form-section">
+                    <h2>Añadir Gasto</h2>
+                    <form id="expense-form">
+                        <div class="form-group">
+                            <label for="project">Proyecto</label>
+                            <input type="text" id="project" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Categoría</label>
+                            <input type="text" id="category" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Descripción (Opcional)</label>
+                            <input type="text" id="description">
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Fecha</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Importe (€)</label>
+                            <input type="number" step="0.01" id="amount" required>
+                        </div>
+                        <button type="submit" class="btn-primary">Añadir gasto</button>
+                    </form>
+                </section>
+
+                <section class="table-section">
+                    <div class="table-header">
+                        <h2>Historial de Gastos</h2>
+                        <div class="filters">
+                            <select id="filter-project">
+                                <option value="">Todos los Proyectos</option>
+                            </select>
+                            <select id="filter-category">
+                                <option value="">Todas las Categorías</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="expenses-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Proyecto</th>
+                                    <th>Categoría</th>
+                                    <th>Descripción</th>
+                                    <th>Importe</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenses-body">
+                                <!-- Filas de gastos -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
