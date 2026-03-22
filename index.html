@@ -3,104 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Gastos</title>
+    <title>GastosApp - Control de Gastos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Login Screen -->
     <div id="login-screen" class="screen">
-        <div class="login-card">
-            <h2>Acceso Requerido</h2>
-            <input type="password" id="password-input" placeholder="Contraseña">
-            <button id="login-button">Entrar</button>
-            <p id="login-error" class="hidden">Contraseña incorrecta</p>
+        <div class="login-container">
+            <div class="login-visual">
+                <div class="visual-circle c1"></div>
+                <div class="visual-circle c2"></div>
+                <div class="visual-circle c3"></div>
+                <div class="login-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                        <line x1="1" y1="10" x2="23" y2="10"></line>
+                    </svg>
+                </div>
+            </div>
+            <div class="login-card">
+                <div class="login-header">
+                    <h1>GastosApp</h1>
+                    <p>Controla tus gastos de forma sencilla</p>
+                </div>
+                <form id="login-form">
+                    <div class="input-group">
+                        <input type="password" id="password-input" placeholder=" " autocomplete="current-password">
+                        <label for="password-input">Contraseña</label>
+                        <span class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </span>
+                    </div>
+                    <button type="submit" id="login-button" class="btn-primary btn-full">
+                        <span>Entrar</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+                </form>
+                <p id="login-error" class="error-message hidden">Contraseña incorrecta</p>
+            </div>
         </div>
     </div>
 
+    <!-- Dashboard Screen -->
     <div id="dashboard-screen" class="screen hidden">
-        <header>
-            <h1>Mis Gastos</h1>
-            <div class="summary">
-                <div class="stat-box">
-                    <span class="stat-label">Total Gastado</span>
-                    <span class="stat-value" id="total-spent">0,00 €</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-label">Proyectos Activos</span>
-                    <span class="stat-value" id="active-projects">0</span>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                        <line x1="1" y1="10" x2="23" y2="10"></line>
+                    </svg>
+                    <span>GastosApp</span>
                 </div>
             </div>
-        </header>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-section="add">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                    <span>Añadir Gasto</span>
+                </a>
+                <a href="#" class="nav-item" data-section="history">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>Historial</span>
+                </a>
+            </nav>
 
-        <main>
-            <section class="projects-section">
-                <h2>Proyectos</h2>
+            <div class="sidebar-footer">
+                <button id="logout-btn" class="btn-logout">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Cerrar Sesión</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="topbar">
+                <button class="menu-toggle" id="menu-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <h1 id="page-title">Dashboard</h1>
+                <div class="topbar-spacer"></div>
+                <div class="user-info">
+                    <span class="user-name">Usuario</span>
+                    <div class="user-avatar">U</div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="section-dashboard" class="content-section active">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon expense">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                <polyline points="17 6 23 6 23 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Total Gastado</span>
+                            <span class="stat-value" id="total-spent">0,00 €</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon projects">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Proyectos</span>
+                            <span class="stat-value" id="active-projects">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon categories">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                <polyline points="2 17 12 22 22 17"></polyline>
+                                <polyline points="2 12 12 17 22 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Categorías</span>
+                            <span class="stat-value" id="total-categories">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon entries">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Entradas</span>
+                            <span class="stat-value" id="total-entries">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects Grid -->
+                <div class="section-header">
+                    <h2>Proyectos</h2>
+                </div>
                 <div class="projects-grid" id="projects-grid">
-                    <!-- Tarjetas de proyectos -->
+                    <!-- Project cards -->
                 </div>
             </section>
 
-            <div class="content-row">
-                <section class="form-section">
-                    <h2>Añadir Gasto</h2>
-                    <form id="expense-form">
-                        <div class="form-group">
-                            <label for="project">Proyecto</label>
-                            <input type="text" id="project" required>
+            <!-- Add Expense Section -->
+            <section id="section-add" class="content-section">
+                <div class="form-container">
+                    <div class="form-card">
+                        <div class="form-header">
+                            <h2>Nuevo Gasto</h2>
+                            <p>Registra un nuevo gasto en el sistema</p>
                         </div>
-                        <div class="form-group">
-                            <label for="category">Categoría</label>
-                            <input type="text" id="category" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Descripción (Opcional)</label>
-                            <input type="text" id="description">
-                        </div>
-                        <div class="form-group">
-                            <label for="date">Fecha</label>
-                            <input type="date" id="date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="amount">Importe (€)</label>
-                            <input type="number" step="0.01" id="amount" required>
-                        </div>
-                        <button type="submit" class="btn-primary">Añadir gasto</button>
-                    </form>
-                </section>
+                        <form id="expense-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="project">Proyecto</label>
+                                    <div class="input-with-icon">
+                                        <input type="text" id="project" required list="projects-list" autocomplete="off">
+                                        <datalist id="projects-list"></datalist>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="category">Categoría</label>
+                                    <div class="input-with-icon">
+                                        <input type="text" id="category" required list="categories-list" autocomplete="off">
+                                        <datalist id="categories-list"></datalist>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Descripción (Opcional)</label>
+                                <input type="text" id="description" placeholder="Ej: Compra de materiales...">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="date">Fecha</label>
+                                    <input type="date" id="date" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="amount">Importe (€)</label>
+                                    <input type="number" step="0.01" min="0" id="amount" placeholder="0.00" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary btn-full">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                <span>Añadir Gasto</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
 
-                <section class="table-section">
-                    <div class="table-header">
-                        <h2>Historial de Gastos</h2>
-                        <div class="filters">
+            <!-- History Section -->
+            <section id="section-history" class="content-section">
+                <div class="section-header">
+                    <h2>Historial de Gastos</h2>
+                    <div class="filters">
+                        <div class="filter-group">
                             <select id="filter-project">
                                 <option value="">Todos los Proyectos</option>
                             </select>
+                        </div>
+                        <div class="filter-group">
                             <select id="filter-category">
                                 <option value="">Todas las Categorías</option>
                             </select>
                         </div>
                     </div>
-                    <div class="table-container">
-                        <table id="expenses-table">
-                            <thead>
-                                <tr>
-                                    <th>Fecha</th>
-                                    <th>Proyecto</th>
-                                    <th>Categoría</th>
-                                    <th>Descripción</th>
-                                    <th>Importe</th>
-                                    <th>Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody id="expenses-body">
-                                <!-- Filas de gastos -->
-                            </tbody>
-                        </table>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Proyecto</th>
+                                <th>Categoría</th>
+                                <th>Descripción</th>
+                                <th>Importe</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenses-body">
+                            <!-- Expense rows -->
+                        </tbody>
+                    </table>
+                    <div id="empty-state" class="empty-state hidden">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M16 16s-1.5-2-4-2-4 2-4 2"></path>
+                            <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                            <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                        </svg>
+                        <p>No hay gastos registrados</p>
+                        <button class="btn-secondary" onclick="showSection('add')">Añadir el primer gasto</button>
                     </div>
-                </section>
-            </div>
+                </div>
+            </section>
         </main>
     </div>
-    
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>

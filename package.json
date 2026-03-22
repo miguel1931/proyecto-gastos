@@ -1,0 +1,15 @@
+{
+  "name": "proyecto-gastos",
+  "version": "1.0.0",
+  "description": "Dashboard de gastos personal con backend serverless",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
+  },
+  "devDependencies": {
+    "vercel": "^37.0.0"
+  }
+}
