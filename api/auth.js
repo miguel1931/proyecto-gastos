@@ -1,10 +1,9 @@
-// Autenticación simple con contraseña
-// En producción, considera usar JWT o sesiones más seguras
+// API de autenticación - CommonJS para Vercel
 
 // Contraseña del sistema - en producción usar variable de entorno
 const APP_PASSWORD = process.env.APP_PASSWORD || 'panza';
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     // CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -22,7 +21,7 @@ export default async function handler(req, res) {
         const { password } = req.body;
 
         if (password === APP_PASSWORD) {
-            // Generar un token simple (en producción usar JWT)
+            // Generar un token simple
             const token = Buffer.from(`${Date.now()}:${password}`).toString('base64');
             return res.status(200).json({ 
                 success: true, 
@@ -39,4 +38,4 @@ export default async function handler(req, res) {
         console.error('Error en autenticación:', error);
         return res.status(500).json({ error: 'Error interno del servidor' });
     }
-}
+};

@@ -1,5 +1,5 @@
-// API de gastos con Redis
-import { createClient } from 'redis';
+// API de gastos con Redis - CommonJS para Vercel
+const { createClient } = require('redis');
 
 // Cliente Redis - se crea bajo demanda
 let redisClient = null;
@@ -53,7 +53,7 @@ const generateId = () => {
         Math.random().toString(36).substring(2, 15);
 };
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     // CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
@@ -156,4 +156,4 @@ export default async function handler(req, res) {
         console.error('Error en API de gastos:', error);
         return res.status(500).json({ error: 'Error interno del servidor' });
     }
-}
+};
