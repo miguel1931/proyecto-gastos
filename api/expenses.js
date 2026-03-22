@@ -1,5 +1,29 @@
-// API de gastos con Vercel KV
-import { kv } from '@vercel/kv';
+// API de gastos con Redis
+import { createClient } from 'redis';
+
+// Cliente Redis - se crea bajo demanda
+let redisClient = null;
+
+async function getRedis() {
+    if (redisClient) return redisClient;
+    
+    const redisUrl = process.env.REDIS_URL || process.env.KV_REST_API_URL;
+    
+    if (!redisUrl) {
+        console.log('No Redis URL found - using memory storage');
+        return null;
+    }
+    
+    try {
+        redisClient = createClient({ url: redisUrl });
+        redisClient.on('error', (err) => console.error('Redis Error:', err));
+        await redisClient.connect();
+        return redisClient;
+    } catch (error) {
+        console.error('Error connecting to Redis:', error);
+        return null;
+    }
+}
 
 // Helper para verificar autenticación
 const verifyAuth = (req) => {
@@ -47,13 +71,15 @@ export default async function handler(req, res) {
     const KV_KEY = 'expenses:all';
 
     try {
+        const redis = await getRedis();
+
         // GET - Obtener todos los gastos
         if (req.method === 'GET') {
             let expenses = [];
             
-            // Intentar obtener de KV, si no existe usar array vacío
-            if (kv) {
-                expenses = await kv.get(KV_KEY) || [];
+            if (redis) {
+                const data = await redis.get(KV_KEY);
+                expenses = data ? JSON.parse(data) : [];
             }
             
             return res.status(200).json(expenses);
@@ -80,16 +106,17 @@ export default async function handler(req, res) {
 
             // Obtener gastos existentes
             let expenses = [];
-            if (kv) {
-                expenses = await kv.get(KV_KEY) || [];
+            if (redis) {
+                const data = await redis.get(KV_KEY);
+                expenses = data ? JSON.parse(data) : [];
             }
 
             // Añadir al principio
             expenses.unshift(newExpense);
 
             // Guardar
-            if (kv) {
-                await kv.set(KV_KEY, expenses);
+            if (redis) {
+                await redis.set(KV_KEY, JSON.stringify(expenses));
             }
 
             return res.status(201).json(newExpense);
@@ -104,8 +131,9 @@ export default async function handler(req, res) {
             }
 
             let expenses = [];
-            if (kv) {
-                expenses = await kv.get(KV_KEY) || [];
+            if (redis) {
+                const data = await redis.get(KV_KEY);
+                expenses = data ? JSON.parse(data) : [];
             }
 
             const initialLength = expenses.length;
@@ -115,8 +143,8 @@ export default async function handler(req, res) {
                 return res.status(404).json({ error: 'Gasto no encontrado' });
             }
 
-            if (kv) {
-                await kv.set(KV_KEY, expenses);
+            if (redis) {
+                await redis.set(KV_KEY, JSON.stringify(expenses));
             }
 
             return res.status(200).json({ success: true, message: 'Gasto eliminado' });
